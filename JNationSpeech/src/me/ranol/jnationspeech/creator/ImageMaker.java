@@ -84,7 +84,7 @@ public class ImageMaker {
 		BufferedImage img = ImageIO.read(new File(dir));
 		return resize(img, w, h);
 	}
-
+ 
 	static BufferedImage resize(Image img, int w, int h) throws IOException, InterruptedException {
 		Image grapOnly = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
 		int[] pixels = new int[w * h];
