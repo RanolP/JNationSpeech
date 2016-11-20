@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.PixelGrabber;
 import java.io.File;
@@ -12,16 +13,17 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import me.ranol.jnationspeech.DataResolver;
+
 public class ImageMaker {
-	private static String layer = "images\\layer.png";
+	private static BufferedImage layer = DataResolver.resolveImage("bgLayer.png");
 	private static Font font;
-	private static Color colorLeft = Color.decode(Integer.parseInt("3D4E7D", 16) + "");
+	private static Color colorLeft = Color.decode("4017789");
 	static {
-		try {
-			font = Font.createFont(Font.TRUETYPE_FONT, new File("fonts\\SpoqaHanSans-bold.ttf"));
-		} catch (Exception e) {
+		font = DataResolver.resolveFont("Bold.ttf");
+		if (font == null) {
+			System.out.println("폰트가 없습니다, 한 고딕으로 설정합니다.");
 			font = new Font("한고딕", Font.PLAIN, 15);
-			e.printStackTrace();
 		}
 	}
 
@@ -65,6 +67,7 @@ public class ImageMaker {
 
 		BufferedImage lImg = new BufferedImage(left.length() * 28, h / 17, BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D lGraphic = lImg.createGraphics();
+		lGraphic.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		lGraphic.setFont(font.deriveFont(w / 80.0f));
 		lGraphic.setColor(colorLeft);
 		lGraphic.drawString(left, 0, lImg.getHeight() - h / 180);
@@ -73,6 +76,7 @@ public class ImageMaker {
 
 		BufferedImage cImg = new BufferedImage(center.length() * 25, h / 20, BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D cGraphic = cImg.createGraphics();
+		cGraphic.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		cGraphic.setFont(font.deriveFont(w / 40.0f));
 		cGraphic.setColor(Color.WHITE);
 		cGraphic.drawString(center, 0, cImg.getHeight() - h / 90);
