@@ -1,7 +1,7 @@
 package me.ranol.jnationspeech;
 
 import java.awt.EventQueue;
-import java.awt.image.RenderedImage;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -115,7 +115,7 @@ public class JNationSpeech extends JFrame {
 		String path = chooser.getSelectedFile().getAbsolutePath();
 		File file = new File(path);
 		try {
-			ImageIO.write((RenderedImage) box.getImage(), "PNG", file);
+			ImageIO.write((BufferedImage) box.getImage(), "PNG", file);
 		} catch (Exception e) {
 		}
 	}

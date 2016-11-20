@@ -37,7 +37,7 @@ public class ImageMaker {
 		}
 		if (dir != null && (bg.getWidth() % 16 != 0 || bg.getHeight() % 9 != 0)) {
 			int rw = bg.getWidth();
-			int rh = bg.getHeight();
+			int rh;
 			if (rw < 640) {
 				rw = 640;
 				rh = 360;
@@ -60,22 +60,24 @@ public class ImageMaker {
 		int h = bg.getHeight();
 		Graphics2D bgGraphics = bg.createGraphics();
 		bgGraphics.drawImage(bg, 0, 0, null);
-		bgGraphics.setColor(Color.WHITE);
-		bgGraphics.drawRect(0, 0, 640, 360);
 		BufferedImage bi = resize(layer, w, h);
 		bgGraphics.drawImage(bi, 0, 0, null);
-		bgGraphics.setColor(colorLeft);
-		bgGraphics.setFont(font.deriveFont(w / 37.0f));
-		bgGraphics.drawString(left, (int) (w * 0.06), (int) (h * 0.16));
-		bgGraphics.setFont(font.deriveFont(w / 25.0f));
 
-		BufferedImage cImg = new BufferedImage(center.length() * 22, 30, BufferedImage.TYPE_4BYTE_ABGR);
+		BufferedImage lImg = new BufferedImage(left.length() * 28, h / 17, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D lGraphic = lImg.createGraphics();
+		lGraphic.setFont(font.deriveFont(w / 80.0f));
+		lGraphic.setColor(colorLeft);
+		lGraphic.drawString(left, 0, lImg.getHeight() - h / 180);
+		lGraphic.dispose();
+		bgGraphics.drawImage(resize(lImg, (int) (w * 0.5), (int) (h * 0.1)), (int) (w * 0.05), (int) (h * 0.06), null);
+
+		BufferedImage cImg = new BufferedImage(center.length() * 25, h / 20, BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D cGraphic = cImg.createGraphics();
-		cGraphic.setFont(font.deriveFont(25.0f));
+		cGraphic.setFont(font.deriveFont(w / 40.0f));
 		cGraphic.setColor(Color.WHITE);
-		cGraphic.drawString(center, 0, cImg.getHeight());
+		cGraphic.drawString(center, 0, cImg.getHeight() - h / 90);
 		cGraphic.dispose();
-		bgGraphics.drawImage(resize(cImg, (int) (w * 0.9), (int) (h * 0.1)), (int) (w * 0.12), (int) (h * 0.8), null);
+		bgGraphics.drawImage(resize(cImg, (int) (w * 0.77), (int) (h * 0.1)), (int) (w * 0.13), (int) (h * 0.8), null);
 		bgGraphics.dispose();
 		return bg;
 	}
@@ -84,7 +86,7 @@ public class ImageMaker {
 		BufferedImage img = ImageIO.read(new File(dir));
 		return resize(img, w, h);
 	}
- 
+
 	static BufferedImage resize(Image img, int w, int h) throws IOException, InterruptedException {
 		Image grapOnly = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
 		int[] pixels = new int[w * h];
